@@ -1,0 +1,217 @@
+/* Global Styles */
+*{
+  padding:0;
+  margin:0;
+}
+
+main {
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+}
+
+.home-container {
+  display: flex;
+  min-width: 100vw;
+  flex-wrap: wrap;
+  min-height: 100vh;
+  background-image: url("./Images/login.jpg");
+  background-repeat: no-repeat;
+  background-position: left;
+  background-size: cover;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.home2-container{
+  display: flex;
+  min-width: 100vw;
+  flex-wrap: wrap;
+  min-height: 100vh;
+  background-image: url("./Images/register.jpg");
+  background-repeat: no-repeat;
+  background-position: left;
+  background-size: cover;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#role{
+  width: 6rem;
+  height: 2rem;
+  border-radius: 10px;
+}
+
+.index-page {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  width: 100vw;
+}
+
+/* Navigation Bar */
+.navBar {
+  background-color: black;
+  padding: 10px 18px;
+  min-width: 100vw;
+  box-sizing: border-box;
+  color: white;
+  font-weight: bold;
+  font-size: 1.5rem;
+  position: fixed;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+/* Paragraphs */
+p {
+  margin: 0;
+  font-size: 2.5rem;
+}
+
+/* List Items */
+.list-items {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  padding: 0;
+  margin: 8px;
+}
+
+.list-items li {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+}
+
+.list-items li:hover {
+  color: gold;
+}
+
+/* Login Page */
+.login-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 20rem;
+  min-height: 20rem;
+  padding: 25px;
+  justify-content: space-evenly;
+  color: white;
+  gap: 5px;
+  align-items: center;
+  border: 1px solid white;
+  border-radius: 10px;
+  backdrop-filter: blur(5px);
+}
+
+.login-container input {
+  width: 100%;
+  border-radius: 40px;
+  height: 1rem;
+  padding: 10px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 1em;
+}
+
+.login-container button {
+  width: 6rem;
+  height: 2rem;
+  padding: 2px;
+  font-size: 1em;
+  cursor: pointer;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  background-color: hsl(0, 0%, 20%);
+}
+
+button:hover {
+  background-color: hsl(0, 0%, 100%);
+}
+
+/*Hero Section*/
+.hero-section {
+  text-align: center;
+  padding: 100px 20px;
+  background-color: #f4f4f4;
+  width: 100%;
+}
+
+.hero-section h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.hero-section p {
+  font-size: 18px;
+  margin-bottom: 40px;
+}
+
+.search-bar {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.search-bar input {
+  padding: 10px;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.search-bar button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.search-bar button:hover {
+  background-color: #45a049;
+}
+
+.features-section {
+  display: flex;
+  justify-content: space-around;
+  padding: 50px 20px;
+  width: 100%;
+  background-color: white;
+}
+
+.feature {
+  text-align: center;
+  max-width: 300px;
+}
+
+.feature h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.feature p {
+  font-size: 16px;
+  color: #666;
+}
+
+.navBar .list-items a {
+  text-decoration: none;
+  color: inherit; /* Ensures it inherits text color from parent */
+}
+
+/* Remove visited link styles */
+.navBar .list-items a:visited {
+  color: inherit;
+}
