@@ -1,6 +1,6 @@
 import { createBrowserRouter,RouterProvider } from 'react-router-dom'
 
-import Index from './Pages/index.jsx'
+import Index from './Pages/Index.jsx'
 import NavBar from './Components/NavBar.jsx'
 import Login from './Pages/Login.jsx'
 import Register from './Pages/Register.jsx'
