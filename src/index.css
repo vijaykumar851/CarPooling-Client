@@ -106,7 +106,7 @@ p {
   min-height: 20rem;
   padding: 25px;
   justify-content: space-evenly;
-  color: white;
+  color: rgb(242, 39, 8);
   gap: 5px;
   align-items: center;
   border: 1px solid white;
@@ -136,7 +136,7 @@ p {
 }
 
 button:hover {
-  background-color: hsl(0, 0%, 100%);
+  background-color: hsl(0, 5%, 51%);
 }
 
 /*Hero Section*/
