@@ -33,7 +33,7 @@ function Login() {
         localStorage.setItem('user', JSON.stringify(users[0]));
         setIsLoggedIn(true);
         alert('Login successful!');
-        navigate('/Index'); // Redirect to Dashboard
+        navigate('/Dashboard'); 
       } else {
         alert('Invalid username or password.');
       }

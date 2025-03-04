@@ -19,11 +19,13 @@ function App() {
       path:'/register',
       element:<><NavBar/><Register/></>
     }
+
   ]) 
   return (
     <>
       <main>
         <RouterProvider router={router}/>
+
         <Footer />
       </main>
     </>

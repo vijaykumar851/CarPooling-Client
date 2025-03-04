@@ -4,11 +4,16 @@ function Register() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     username: '',
+    firstName: '',
+    middleName: '',
+    lastName: '',
     email: '',
     mobileNumber: '',
     password: '',
     confirmPassword: '',
     role: 'rider',
+    file: null,
+    numberPlate: '',
   });
 
   const handleChange = (e) => {
@@ -16,16 +21,24 @@ function Register() {
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleFileChange = (e) => {
+    setFormData({ ...formData, file: e.target.files[0] });
+  };
+
   const validateStep = () => {
     if (step === 1 && !formData.username) {
       alert('Error: Please enter a username!');
       return false;
     }
-    if (step === 2 && (!formData.email || !formData.mobileNumber)) {
+    if (step === 2 && (!formData.firstName || !formData.lastName)) {
+      alert('Error: Please enter both first name and last name!');
+      return false;
+    }
+    if (step === 3 && (!formData.email || !formData.mobileNumber)) {
       alert('Error: Please enter both email and mobile number!');
       return false;
     }
-    if (step === 3 && (!formData.password || !formData.confirmPassword)) {
+    if (step === 4 && (!formData.password || !formData.confirmPassword)) {
       alert('Error: Please enter and confirm your password!');
       return false;
     }
@@ -76,21 +89,30 @@ function Register() {
     }
 
     try {
+      const formDataToSend = new FormData();
+      Object.keys(formData).forEach((key) => {
+        formDataToSend.append(key, formData[key]);
+      });
+
       const response = await fetch('http://localhost:3000/users', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: formDataToSend,
       });
 
       if (response.ok) {
         alert('Registration successful!');
         setFormData({
           username: '',
+          firstName: '',
+          middleName: '',
+          lastName: '',
           email: '',
           mobileNumber: '',
           password: '',
           confirmPassword: '',
           role: 'rider',
+          file: null,
+          numberPlate: '',
         });
         setStep(1);
       } else {
@@ -116,6 +138,19 @@ function Register() {
           )}
           {step === 2 && (
             <>
+              <input type="text" name="firstName" required placeholder="First Name" value={formData.firstName} onChange={handleChange} />
+              <br /><br />
+              <input type="text" name="middleName" placeholder="Middle Name" value={formData.middleName} onChange={handleChange} />
+              <br /><br />
+              <input type="text" name="lastName" required placeholder="Last Name" value={formData.lastName} onChange={handleChange} />
+              <br /><br />
+              <button type="button" onClick={prevStep}>Back</button>
+              <span style={{ margin: '0 10px' }}></span>
+              <button type="button" onClick={nextStep}>Next</button>
+            </>
+          )}
+          {step === 3 && (
+            <>
               <input type="email" name="email" required placeholder="Email" value={formData.email} onChange={handleChange} />
               <br /><br />
               <input type="tel" name="mobileNumber" required placeholder="Mobile Number" value={formData.mobileNumber} onChange={handleChange} />
@@ -125,7 +160,7 @@ function Register() {
               <button type="button" onClick={nextStep}>Next</button>
             </>
           )}
-          {step === 3 && (
+          {step === 4 && (
             <>
               <input type="password" name="password" required placeholder="Create password" value={formData.password} onChange={handleChange} />
               <br /><br />
@@ -136,12 +171,16 @@ function Register() {
               <button type="button" onClick={nextStep}>Next</button>
             </>
           )}
-          {step === 4 && (
+          {step === 5 && (
             <>
               <select id="role" name="role" value={formData.role} onChange={handleChange} style={{ width: '100%' }}>
                 <option value="rider">Rider</option>
                 <option value="driver">Driver</option>
               </select>
+              <br /><br />
+              <input type="file" name="file" onChange={handleFileChange} />
+              <br /><br />
+              <input type="text" name="numberPlate" placeholder="Number Plate" value={formData.numberPlate} onChange={handleChange} />
               <br /><br />
               <button type="button" onClick={prevStep}>Back</button>
               <span style={{ margin: '0 10px' }}></span>
