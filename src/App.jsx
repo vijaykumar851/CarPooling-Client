@@ -1,4 +1,4 @@
-import { createBrowserRouter,RouterProvider } from 'react-router-dom'
+import { createBrowserRouter,Route,RouterProvider } from 'react-router-dom'
 
 import Index from './Pages/Index.jsx'
 import NavBar from './Components/NavBar.jsx'
@@ -20,12 +20,12 @@ function App() {
       element:<><NavBar/><Register/></>
     }
 
+
   ]) 
   return (
     <>
       <main>
         <RouterProvider router={router}/>
-
         <Footer />
       </main>
     </>

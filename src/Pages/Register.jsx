@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Register() {
   const [step, setStep] = useState(1);
@@ -15,6 +16,8 @@ function Register() {
     file: null,
     numberPlate: '',
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -55,7 +58,7 @@ function Register() {
 
   const checkExistingUser = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/users`);
+      const response = await fetch(`https://carpooling-server-vak6.onrender.com/users`);
       const users = await response.json();
       return users.some(
         (user) =>
@@ -94,7 +97,7 @@ function Register() {
         formDataToSend.append(key, formData[key]);
       });
 
-      const response = await fetch('http://localhost:3000/users', {
+      const response = await fetch('https://carpooling-server-vak6.onrender.com/users', {
         method: 'POST',
         body: formDataToSend,
       });
@@ -115,6 +118,7 @@ function Register() {
           numberPlate: '',
         });
         setStep(1);
+        navigate('/login'); // Redirect to login page
       } else {
         alert('Error: Registration failed!');
       }

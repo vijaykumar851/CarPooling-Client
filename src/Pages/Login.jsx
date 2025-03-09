@@ -19,14 +19,14 @@ function Login() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async () => { 
     if (!formData.username || !formData.password) {
       alert('Please enter username and password.');
       return;
     }
 
     try {
-      const response = await fetch(`http://localhost:3000/users?username=${formData.username}&password=${formData.password}`);
+      const response = await fetch(`https://carpooling-server-vak6.onrender.com/users?username=${formData.username}&password=${formData.password}`);
       const users = await response.json();
 
       if (users.length > 0) {
