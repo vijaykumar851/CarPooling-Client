@@ -10,10 +10,11 @@ function Dashboard() {
     const fetchUserData = async () => {
       try {
         const user = JSON.parse(localStorage.getItem('user'));
+        console.log('Fetched user data:', user); // Debug log
         if (user) {
           setUserData(user);
         } else {
-          navigate('/login');
+          navigate('/Dashboard');
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -22,7 +23,7 @@ function Dashboard() {
 
     const fetchRides = async () => {
       try {
-        const response = await fetch('http://localhost:3000/rides');
+        const response = await fetch('https://carpooling-server-vlzw.onrender.com/rides');
         const data = await response.json();
         setRides(data);
       } catch (error) {

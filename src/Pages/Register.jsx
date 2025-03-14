@@ -58,7 +58,7 @@ function Register() {
 
   const checkExistingUser = async () => {
     try {
-      const response = await fetch(`https://carpooling-server-vak6.onrender.com/users`);
+      const response = await fetch('https://carpooling-server-vlzw.onrender.com/users');
       const users = await response.json();
       return users.some(
         (user) =>
@@ -97,7 +97,7 @@ function Register() {
         formDataToSend.append(key, formData[key]);
       });
 
-      const response = await fetch('https://carpooling-server-vak6.onrender.com/users', {
+      const response = await fetch('https://carpooling-server-vlzw.onrender.com/users', {
         method: 'POST',
         body: formDataToSend,
       });

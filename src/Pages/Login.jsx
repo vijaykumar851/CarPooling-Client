@@ -17,14 +17,14 @@ function Login({ setUser }) {
     }
 
     try {
-      const response = await fetch(`http://localhost:3000/users?username=${formData.username}&password=${formData.password}`);
+      const response = await fetch('https://carpooling-server-vlzw.onrender.com/users');
       const users = await response.json();
 
       if (users.length > 0) {
-        localStorage.setItem('user', JSON.stringify(users[0]));
+        localStorage.setItem('users', JSON.stringify(users[0]));
         setUser(users[0]);
         alert('Login successful!');
-        navigate('/dashboard'); 
+        navigate('/Dashboard'); 
       } else {
         alert('Invalid username or password.');
       }

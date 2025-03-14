@@ -34,7 +34,7 @@ function Profile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:3000/users/${userData.id}`, {
+      const response = await fetch('https://carpooling-server-vlzw.onrender.com/users', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
