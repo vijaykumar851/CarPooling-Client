@@ -13,7 +13,8 @@ function Register() {
     password: '',
     confirmPassword: '',
     role: 'rider',
-    file: null,
+    frontFile: null,
+    backFile: null,
     numberPlate: '',
   });
 
@@ -25,7 +26,8 @@ function Register() {
   };
 
   const handleFileChange = (e) => {
-    setFormData({ ...formData, file: e.target.files[0] });
+    const { name, files } = e.target;
+    setFormData({ ...formData, [name]: files[0] });
   };
 
   const validateStep = () => {
@@ -74,23 +76,23 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!formData.role) {
       alert('Error: Please select a role!');
       return;
     }
-  
+
     if (formData.password !== formData.confirmPassword) {
       alert('Error: Passwords do not match!');
       return;
     }
-  
+
     const userExists = await checkExistingUser();
     if (userExists) {
       alert('Error: Username, email, or mobile number already exists!');
       return;
     }
-  
+
     try {
       const response = await fetch('https://carpooling-server-vlzw.onrender.com/users', {
         method: 'POST',
@@ -99,7 +101,7 @@ function Register() {
         },
         body: JSON.stringify(formData)
       });
-  
+
       if (response.ok) {
         alert('Registration successful!');
         setFormData({
@@ -112,7 +114,8 @@ function Register() {
           password: '',
           confirmPassword: '',
           role: 'rider',
-          file: null,
+          frontFile: null,
+          backFile: null,
           numberPlate: '',
         });
         setStep(1);
@@ -155,7 +158,16 @@ function Register() {
             <>
               <input type="email" name="email" required placeholder="Email" value={formData.email} onChange={handleChange} />
               <br /><br />
-              <input type="tel" name="mobileNumber" required placeholder="Mobile Number" value={formData.mobileNumber} onChange={handleChange} />
+              <input
+                type="tel"
+                name="mobileNumber"
+                required
+                placeholder="Mobile Number"
+                value={formData.mobileNumber}
+                onChange={handleChange}
+                pattern="[0-9]{10}"
+                maxLength="10"
+              />
               <br /><br />
               <button type="button" onClick={prevStep}>Back</button>
               <span style={{ margin: '0 10px' }}></span>
@@ -180,10 +192,22 @@ function Register() {
                 <option value="driver">Driver</option>
               </select>
               <br /><br />
-              <input type="file" name="file" onChange={handleFileChange} />
-              <br /><br />
-              <input type="text" name="numberPlate" placeholder="Number Plate" value={formData.numberPlate} onChange={handleChange} />
-              <br /><br />
+              {formData.role === 'driver' && (
+                <>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <label style={{ marginRight: '10px' }}>Front Side</label>
+                    <input type="file" name="frontFile" accept="image/*" onChange={handleFileChange} />
+                  </div>
+                  <br /><br />
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <label style={{ marginRight: '10px' }}>Back Side</label>
+                    <input type="file" name="backFile" accept="image/*" onChange={handleFileChange} />
+                  </div>
+                  <br /><br />
+                  <input type="text" name="numberPlate" placeholder="Number Plate" value={formData.numberPlate} onChange={handleChange} />
+                  <br /><br />
+                </>
+              )}
               <button type="button" onClick={prevStep}>Back</button>
               <span style={{ margin: '0 10px' }}></span>
               <button type="submit">Submit</button>
