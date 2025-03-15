@@ -16,7 +16,7 @@ function Profile() {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user) {
       setUserData(user);
-      setProfilePreview(user.profilePicture);
+      setProfilePreview(user.profilePicture ? URL.createObjectURL(user.profilePicture) : null);
     }
   }, []);
 
@@ -34,7 +34,7 @@ function Profile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('https://carpooling-server-vlzw.onrender.com/users', {
+      const response = await fetch(`https://carpooling-server-vlzw.onrender.com/users/${userData.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'

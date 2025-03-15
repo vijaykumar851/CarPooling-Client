@@ -10,21 +10,25 @@ function Login({ setUser }) {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleLogin = async () => { 
+  const handleLogin = async () => {
     if (!formData.username || !formData.password) {
       alert('Please enter username and password.');
       return;
     }
 
     try {
-      const response = await fetch('https://carpooling-server-vlzw.onrender.com/users');
+      const response = await fetch(`https://carpooling-server-vlzw.onrender.com/users`);
       const users = await response.json();
 
-      if (users.length > 0) {
-        localStorage.setItem('users', JSON.stringify(users[0]));
-        setUser(users[0]);
+      const user = users.find(
+        (user) => user.username === formData.username && user.password === formData.password
+      );
+
+      if (user) {
+        localStorage.setItem('user', JSON.stringify(user));
+        setUser(user);
         alert('Login successful!');
-        navigate('/Dashboard'); 
+        navigate('/dashboard');
       } else {
         alert('Invalid username or password.');
       }
