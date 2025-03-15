@@ -5,6 +5,7 @@ import NavBar from './Components/NavBar.jsx'
 import Login from './Pages/Login.jsx'
 import Register from './Pages/Register.jsx'
 import Footer from './Components/Footer.jsx'
+import Rental from './Pages/Rental.jsx'
 function App() {
   const router = createBrowserRouter([
     {
@@ -18,6 +19,10 @@ function App() {
     {
       path:'/register',
       element:<><NavBar/><Register/></>
+    },
+    {
+      path:'/rental',
+      element:<><NavBar/><Rental/></>
     }
   ]) 
   return (
