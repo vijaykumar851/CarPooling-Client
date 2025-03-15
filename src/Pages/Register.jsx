@@ -74,34 +74,32 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!formData.role) {
       alert('Error: Please select a role!');
       return;
     }
-
+  
     if (formData.password !== formData.confirmPassword) {
       alert('Error: Passwords do not match!');
       return;
     }
-
+  
     const userExists = await checkExistingUser();
     if (userExists) {
       alert('Error: Username, email, or mobile number already exists!');
       return;
     }
-
+  
     try {
-      const formDataToSend = new FormData();
-      Object.keys(formData).forEach((key) => {
-        formDataToSend.append(key, formData[key]);
-      });
-
       const response = await fetch('https://carpooling-server-vlzw.onrender.com/users', {
         method: 'POST',
-        body: formDataToSend,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
       });
-
+  
       if (response.ok) {
         alert('Registration successful!');
         setFormData({
