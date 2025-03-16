@@ -15,8 +15,6 @@ function Dashboard() {
         const user = JSON.parse(localStorage.getItem('user'));
         if (user) {
           setUserData(user);
-        } else {
-          navigate('/login');
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -35,10 +33,20 @@ function Dashboard() {
 
     fetchUserData();
     fetchRides();
-  }, [navigate]);
+  }, []);
 
   const handleSearch = () => {
-    alert(`Searching for rides from: ${from} to: ${to}`);
+    if (!userData) {
+      alert('Please log in to search for rides.');
+      navigate('/login');
+      return;
+    }
+
+    if (from && to) {
+      navigate('/ride-sharing', { state: { from, to } });
+    } else {
+      alert('Please fill in both "Leaving from" and "Going to" fields.');
+    }
   };
 
   return (
@@ -79,16 +87,16 @@ function Dashboard() {
       </section>
 
       <section className="savings-section">
-        <img src="/public/dashboard.jpg" alt="Carpooling"/>
+        <img src="/dashboard.jpg" alt="Carpooling"/>
         <div className="savings-content">
           <h2>Carpooling saves you money</h2>
           <p>Whether you are a car owner, bike owner, or rider, carpooling can help you save up to 80% on your commute.</p>
           <div className="savings-feature">
-            <img src="/public/carpool-graphic.png" alt="Car/Bike Owner" />
+            <img src="carpool-graphic.png" alt="Car/Bike Owner" />
             <p><strong>Car/Bike Owner:</strong> Save up to 75% on fuel and maintenance costs.</p>
           </div>
           <div className="savings-feature">
-            <img src="/public/carpool-graphic.png" alt="Riders" />
+            <img src="/carpool-graphic.png" alt="Riders" />
             <p><strong>Riders:</strong> Save up to 75% of your costs compared to cabs.</p>
           </div>
         </div>
@@ -98,7 +106,7 @@ function Dashboard() {
         <h2>Our best Travelling Routes</h2>
         <div className="routes-container">
           <div className="route-box">
-            <img src="/public/medak.jpg" alt="Route" />
+            <img src="/medak.jpg" alt="Route" />
             <div className="route-box-content">
               <h3>Hyderabad → Medak</h3>
               <p>Costs Ranges 300-500</p>
@@ -107,7 +115,7 @@ function Dashboard() {
             </div>
           </div>
           <div className="route-box">
-            <img src="/public/warangal.jpeg" alt="Route" />
+            <img src="/warangal.jpeg" alt="Route" />
             <div className="route-box-content">
               <h3>Secunderabad → Warangal</h3>
               <p>Cost Ranges 500-700</p>
@@ -116,7 +124,7 @@ function Dashboard() {
             </div>
           </div>
           <div className="route-box">
-            <img src="/public/vijayawada.jpg" alt="Route" />
+            <img src="/vijayawada.jpg" alt="Route" />
             <div className="route-box-content">
               <h3>Hyderabad → Vijayawada</h3>
               <p>Cost Ranges 800-1000</p>

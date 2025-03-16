@@ -1,13 +1,14 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
-import Index from './Pages/Index.jsx';
 import NavBar from './Components/NavBar.jsx';
 import Login from './Pages/Login.jsx';
 import Register from './Pages/Register.jsx';
 import Footer from './Components/Footer.jsx';
 import Dashboard from './Pages/Dashboard.jsx';
 import Profile from './Pages/Profile.jsx'; // Import the Profile component
+import RideSharing from './Pages/RideSharing.jsx'; // Import the RideSharing component
+import ShareRide from './Pages/ShareRide.jsx'; // Import the ShareRide component
 
 function ErrorPage() {
   return (
@@ -34,11 +35,12 @@ function App() {
       <NavBar user={user} setUser={setUser} />
       <main>
         <Routes>
-          <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login setUser={setUser} />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} /> {/* Add the profile route */}
+          <Route path="/ride-sharing" element={<RideSharing />} /> {/* Add the ride-sharing route */}
+          <Route path="/share-ride" element={<ShareRide />} /> {/* Add the share-ride route */}
           <Route path="*" element={<ErrorPage />} />
         </Routes>
         <Footer />

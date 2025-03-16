@@ -24,11 +24,10 @@ function NavBar({ user, setUser }) {
     <div className="navBar">
       <p>CarP🚗🚘L</p>
       <ul className="list-items">
-        <NavLink className='item2' to="/"><li>Home</li></NavLink>
-        <li>About</li>
+        <NavLink className='item2' to="/dashboard"><li>Dashboard</li></NavLink>
         {user ? (
           <>
-            <NavLink className='item2' to="/dashboard"><li>Dashboard</li></NavLink>
+            <NavLink className='item2' to="/share-ride"><li>Share a Ride</li></NavLink>
             <div className="profile-container">
               <img
                 src="/path/to/profile-image.png" // Replace with the path to your profile image
