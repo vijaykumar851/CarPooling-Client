@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 import NavBar from './Components/NavBar.jsx';
@@ -9,6 +9,7 @@ import Dashboard from './Pages/Dashboard.jsx';
 import Profile from './Pages/Profile.jsx'; // Import the Profile component
 import RideSharing from './Pages/RideSharing.jsx'; // Import the RideSharing component
 import ShareRide from './Pages/ShareRide.jsx'; // Import the ShareRide component
+import ChangePassword from './Pages/ChangePassword.jsx'; // Import the ChangePassword component
 
 function ErrorPage() {
   return (
@@ -35,12 +36,14 @@ function App() {
       <NavBar user={user} setUser={setUser} />
       <main>
         <Routes>
+          <Route path="/" element={<Navigate to="/dashboard" />} />
           <Route path="/login" element={<Login setUser={setUser} />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} /> {/* Add the profile route */}
           <Route path="/ride-sharing" element={<RideSharing />} /> {/* Add the ride-sharing route */}
           <Route path="/share-ride" element={<ShareRide />} /> {/* Add the share-ride route */}
+          <Route path="/change-password" element={<ChangePassword />} /> {/* Add the change-password route */}
           <Route path="*" element={<ErrorPage />} />
         </Routes>
         <Footer />

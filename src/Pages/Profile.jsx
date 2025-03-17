@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../Profile.css'; // Import the Profile.css file for styling
-
+import '../Profile.css';
 function Profile() {
   const [userData, setUserData] = useState({
     username: '',

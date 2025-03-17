@@ -26,7 +26,7 @@
   
   .profile-container button {
     padding: 10px;
-    background-color: #4CAF50;
+    background-color: hsl(0, 100%, 50%);
     color: white;
     border: none;
     border-radius: 5px;
@@ -35,7 +35,7 @@
   }
   
   .profile-container button:hover {
-    background-color: #45a049;
+    background-color: hsl(0, 100%, 30%);
   }
   
   .profile-picture-container {

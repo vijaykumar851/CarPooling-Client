@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import './NavBar.css'; // Import CSS for styling
+import './NavBar.css'; // CSS styling
 
 function NavBar({ user, setUser }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -18,6 +18,10 @@ function NavBar({ user, setUser }) {
 
   const handleProfileClick = () => {
     navigate('/profile');
+  };
+
+  const handleChangePasswordClick = () => {
+    navigate('/change-password');
   };
 
   return (
@@ -38,8 +42,9 @@ function NavBar({ user, setUser }) {
               {dropdownOpen && (
                 <div className="dropdown-menu">
                   <p>{user.username}</p>
-                  <button onClick={handleProfileClick}>Edit Profile</button>
-                  <button onClick={handleLogout}>Logout</button>
+                  <button className="dropB" onClick={handleProfileClick}>Edit Profile</button>
+                  <button className="dropB" onClick={handleChangePasswordClick}>Change Password</button>
+                  <button className="dropB" onClick={handleLogout}>Logout</button>
                 </div>
               )}
             </div>

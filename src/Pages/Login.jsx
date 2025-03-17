@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 function Login({ setUser }) {
   const [formData, setFormData] = useState({ username: '', password: '' });
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -38,6 +39,10 @@ function Login({ setUser }) {
     }
   };
 
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <div className="home-container">
       <div className="login-container">
@@ -50,12 +55,21 @@ function Login({ setUser }) {
           onChange={handleChange}
         />
         <input
-          type="password"
+          type={showPassword ? 'text' : 'password'}
           name="password"
           placeholder="Password"
           value={formData.password}
           onChange={handleChange}
         />
+        <div>
+          <input
+            type="checkbox"
+            id="showPassword"
+            checked={showPassword}
+            onChange={toggleShowPassword}
+          />
+          <label htmlFor="showPassword">Show Password</label>
+        </div>
         <button onClick={handleLogin}>Login</button>
       </div>
     </div>
