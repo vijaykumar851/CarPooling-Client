@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import './NavBar.css'; // Import CSS for styling
+import './NavBar.css'; // CSS styling
 
 function NavBar({ user, setUser }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -20,15 +20,18 @@ function NavBar({ user, setUser }) {
     navigate('/profile');
   };
 
+  const handleChangePasswordClick = () => {
+    navigate('/change-password');
+  };
+
   return (
     <div className="navBar">
       <p>CarP🚗🚘L</p>
       <ul className="list-items">
-        <NavLink className='item2' to="/"><li>Home</li></NavLink>
-        <li>About</li>
+        <NavLink className='item2' to="/dashboard"><li>Dashboard</li></NavLink>
         {user ? (
           <>
-            <NavLink className='item2' to="/dashboard"><li>Dashboard</li></NavLink>
+            <NavLink className='item2' to="/share-ride"><li>Share a Ride</li></NavLink>
             <div className="profile-container">
               <img
                 src="/path/to/profile-image.png" // Replace with the path to your profile image
@@ -39,8 +42,9 @@ function NavBar({ user, setUser }) {
               {dropdownOpen && (
                 <div className="dropdown-menu">
                   <p>{user.username}</p>
-                  <button onClick={handleProfileClick}>Edit Profile</button>
-                  <button onClick={handleLogout}>Logout</button>
+                  <button className="dropB" onClick={handleProfileClick}>Edit Profile</button>
+                  <button className="dropB" onClick={handleChangePasswordClick}>Change Password</button>
+                  <button className="dropB" onClick={handleLogout}>Logout</button>
                 </div>
               )}
             </div>
