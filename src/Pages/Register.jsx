@@ -68,7 +68,7 @@ function Register() {
 
   const checkExistingUser = async () => {
     try {
-      const response = await fetch('https://carpooling-server-vlzw.onrender.com/users');
+      const response = await fetch(`https://carpooling-server-vlzw.onrender.com/users`);
       const users = await response.json();
       return users.some(
         (user) =>
@@ -84,23 +84,23 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!formData.role) {
       alert('Error: Please select a role!');
       return;
     }
-
+  
     if (formData.password !== formData.confirmPassword) {
       alert('Error: Passwords do not match!');
       return;
     }
-
+  
     const userExists = await checkExistingUser();
     if (userExists) {
       alert('Error: Username, email, or mobile number already exists!');
       return;
     }
-
+  
     try {
       const response = await fetch('https://carpooling-server-vlzw.onrender.com/users', {
         method: 'POST',
@@ -109,7 +109,7 @@ function Register() {
         },
         body: JSON.stringify(formData)
       });
-
+  
       if (response.ok) {
         alert('Registration successful!');
         setFormData({
