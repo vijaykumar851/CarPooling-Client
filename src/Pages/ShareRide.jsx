@@ -28,6 +28,14 @@ const ShareRide = () => {
       price: 1000,
       seatsAvailable: 4,
     },
+    {
+      id: 4,
+      driverName: 'Ravi',
+      from: 'Hyderabad',
+      to: 'Chennai',
+      price: 1100,
+      seatsAvailable: 3,
+    },
   ];
 
   const handleBooking = (rideId) => {
