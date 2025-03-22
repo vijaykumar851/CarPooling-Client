@@ -2,11 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Dashboard.css'; // Import the Dashboard.css file for styling
 
+const locations = ['Hyderabad', 'Tamilnadu', 'Kerala', 'Bangalore', 'Mumbai', 'Delhi', 'Kolkata', 'Chennai', 'Vijayawada'];
+
 function Dashboard() {
   const [userData, setUserData] = useState(null);
   const [rides, setRides] = useState([]);
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
+  const [date, setDate] = useState('');
+  const [passengerCount, setPassengerCount] = useState(1);
+  const [filteredFromLocations, setFilteredFromLocations] = useState([]);
+  const [filteredToLocations, setFilteredToLocations] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,8 +21,6 @@ function Dashboard() {
         const user = JSON.parse(localStorage.getItem('user'));
         if (user) {
           setUserData(user);
-        } else {
-          navigate('/login');
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -35,10 +39,42 @@ function Dashboard() {
 
     fetchUserData();
     fetchRides();
-  }, [navigate]);
+  }, []);
 
   const handleSearch = () => {
-    alert(`Searching for rides from: ${from} to: ${to}`);
+    if (!userData) {
+      alert('Please log in to search for rides.');
+      navigate('/login');
+      return;
+    }
+
+    if (from && to && date && passengerCount) {
+      navigate('/ride-sharing', { state: { from, to, date, passengerCount } });
+    } else {
+      alert('Please fill in all fields.');
+    }
+  };
+
+  const handleFromChange = (e) => {
+    const value = e.target.value;
+    setFrom(value);
+    setFilteredFromLocations(locations.filter((location) => location.toLowerCase().includes(value.toLowerCase())));
+  };
+
+  const handleToChange = (e) => {
+    const value = e.target.value;
+    setTo(value);
+    setFilteredToLocations(locations.filter((location) => location.toLowerCase().includes(value.toLowerCase())));
+  };
+
+  const selectFromLocation = (location) => {
+    setFrom(location);
+    setFilteredFromLocations([]);
+  };
+
+  const selectToLocation = (location) => {
+    setTo(location);
+    setFilteredToLocations([]);
   };
 
   return (
@@ -47,17 +83,52 @@ function Dashboard() {
         <h1>Your pick of rides at low prices</h1>
         <p>Find your perfect carpool match and save money on your commute.</p>
         <div className="search-bar">
+          <div className="autocomplete">
+            <input
+              type="text"
+              placeholder="Leaving from"
+              value={from}
+              onChange={handleFromChange}
+            />
+            {filteredFromLocations.length > 0 && (
+              <ul className="autocomplete-list">
+                {filteredFromLocations.map((location, index) => (
+                  <li key={index} onClick={() => selectFromLocation(location)}>
+                    {location}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <div className="autocomplete">
+            <input
+              type="text"
+              placeholder="Going to"
+              value={to}
+              onChange={handleToChange}
+            />
+            {filteredToLocations.length > 0 && (
+              <ul className="autocomplete-list">
+                {filteredToLocations.map((location, index) => (
+                  <li key={index} onClick={() => selectToLocation(location)}>
+                    {location}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
           <input
-            type="text"
-            placeholder="Leaving from"
-            value={from}
-            onChange={(e) => setFrom(e.target.value)}
+            type="date"
+            placeholder="dd-mm-yyyy"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
           />
           <input
-            type="text"
-            placeholder="Going to"
-            value={to}
-            onChange={(e) => setTo(e.target.value)}
+            type="number"
+            min="1"
+            placeholder="1"
+            value={passengerCount}
+            onChange={(e) => setPassengerCount(e.target.value)}
           />
           <button onClick={handleSearch}>Search</button>
         </div>
@@ -79,16 +150,16 @@ function Dashboard() {
       </section>
 
       <section className="savings-section">
-        <img src="/public/dashboard.jpg" alt="Carpooling"/>
+        <img src="/dashboard.jpg" alt="Carpooling" />
         <div className="savings-content">
           <h2>Carpooling saves you money</h2>
           <p>Whether you are a car owner, bike owner, or rider, carpooling can help you save up to 80% on your commute.</p>
           <div className="savings-feature">
-            <img src="/public/carpool-graphic.png" alt="Car/Bike Owner" />
+            <img src="carpool-graphic.png" alt="Car/Bike Owner" />
             <p><strong>Car/Bike Owner:</strong> Save up to 75% on fuel and maintenance costs.</p>
           </div>
           <div className="savings-feature">
-            <img src="/public/carpool-graphic.png" alt="Riders" />
+            <img src="/carpool-graphic.png" alt="Riders" />
             <p><strong>Riders:</strong> Save up to 75% of your costs compared to cabs.</p>
           </div>
         </div>
@@ -98,7 +169,7 @@ function Dashboard() {
         <h2>Our best Travelling Routes</h2>
         <div className="routes-container">
           <div className="route-box">
-            <img src="/public/medak.jpg" alt="Route" />
+            <img src="/medak.jpg" alt="Route" />
             <div className="route-box-content">
               <h3>Hyderabad → Medak</h3>
               <p>Costs Ranges 300-500</p>
@@ -107,7 +178,7 @@ function Dashboard() {
             </div>
           </div>
           <div className="route-box">
-            <img src="/public/warangal.jpeg" alt="Route" />
+            <img src="/warangal.jpeg" alt="Route" />
             <div className="route-box-content">
               <h3>Secunderabad → Warangal</h3>
               <p>Cost Ranges 500-700</p>
@@ -116,7 +187,7 @@ function Dashboard() {
             </div>
           </div>
           <div className="route-box">
-            <img src="/public/vijayawada.jpg" alt="Route" />
+            <img src="/vijayawada.jpg" alt="Route" />
             <div className="route-box-content">
               <h3>Hyderabad → Vijayawada</h3>
               <p>Cost Ranges 800-1000</p>
