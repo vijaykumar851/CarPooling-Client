@@ -6,10 +6,10 @@ import Login from './Pages/Login.jsx';
 import Register from './Pages/Register.jsx';
 import Footer from './Components/Footer.jsx';
 import Dashboard from './Pages/Dashboard.jsx';
-import Profile from './Pages/Profile.jsx'; // Import the Profile component
-import RideSharing from './Pages/RideSharing.jsx'; // Import the RideSharing component
-import ShareRide from './Pages/ShareRide.jsx'; // Import the ShareRide component
-import ChangePassword from './Pages/ChangePassword.jsx'; // Import the ChangePassword component
+import Profile from './Pages/Profile.jsx'; 
+import RideSharing from './Pages/RideSharing.jsx'; 
+import ShareRide from './Pages/ShareRide.jsx';
+import ChangePassword from './Pages/ChangePassword.jsx'; 
 
 function ErrorPage() {
   return (
