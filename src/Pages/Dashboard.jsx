@@ -2,11 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Dashboard.css'; // Import the Dashboard.css file for styling
 
+const locations = ['Hyderabad', 'Tamilnadu', 'Kerala', 'Bangalore', 'Mumbai', 'Delhi', 'Kolkata', 'Chennai', 'Vijayawada'];
+
 function Dashboard() {
   const [userData, setUserData] = useState(null);
   const [rides, setRides] = useState([]);
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
+  const [date, setDate] = useState('');
+  const [persons, setPersons] = useState(1);
   const [fromSuggestions, setFromSuggestions] = useState([]);
   const [toSuggestions, setToSuggestions] = useState([]);
   const navigate = useNavigate();
@@ -17,8 +21,6 @@ function Dashboard() {
         const user = JSON.parse(localStorage.getItem('user'));
         if (user) {
           setUserData(user);
-        } else {
-          navigate('/login');
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -37,39 +39,37 @@ function Dashboard() {
 
     fetchUserData();
     fetchRides();
-  }, [navigate]);
+  }, []);
 
   const handleSearch = () => {
-    alert(`Searching for rides from: ${from} to: ${to}`);
+    if (!userData) {
+      alert('Please log in to search for rides.');
+      navigate('/login');
+      return;
+    }
+
+    if (from && to && date && persons) {
+      navigate('/ride-sharing', { state: { from, to, date, persons } });
+    } else {
+      alert('Please fill in all fields: "Leaving from", "Going to", "Date", and "Number of Persons".');
+    }
   };
 
-  const locations = ['Hyderabad', 'Bengaluru', 'Delhi', 'Vijayawada', 'TamilNadu','karnataka','pondicherry','kerala','mumbai','kolkata','Maharastra','Gujarat'];
-
-  const getSuggestions = (value) => {
-    const inputValue = value.trim().toLowerCase();
-    const inputLength = inputValue.length;
-
-    return inputLength < 2 ? [] : locations.filter(
-      loc => loc.toLowerCase().slice(0, inputLength) === inputValue
-    );
+  const handleInputChange = (value, setState, setSuggestions) => {
+    setState(value);
+    if (value.length >= 2) {
+      const filteredSuggestions = locations.filter((location) =>
+        location.toLowerCase().startsWith(value.toLowerCase())
+      );
+      setSuggestions(filteredSuggestions);
+    } else {
+      setSuggestions([]);
+    }
   };
 
-  const handleFromChange = (e) => {
-    const value = e.target.value;
-    setFrom(value);
-    setFromSuggestions(getSuggestions(value));
-  };
-
-  const handleToChange = (e) => {
-    const value = e.target.value;
-    setTo(value);
-    setToSuggestions(getSuggestions(value));
-  };
-
-  const handleSuggestionClick = (value, setType) => {
-    setType(value);
-    setFromSuggestions([]);
-    setToSuggestions([]);
+  const handleSuggestionClick = (value, setState, setSuggestions) => {
+    setState(value);
+    setSuggestions([]);
   };
 
   return (
@@ -78,39 +78,62 @@ function Dashboard() {
         <h1>Your pick of rides at low prices</h1>
         <p>Find your perfect carpool match and save money on your commute.</p>
         <div className="search-bar">
-          <div className="input-container">
+          <div className="search-input">
             <input
               type="text"
               placeholder="Leaving from"
               value={from}
-              onChange={handleFromChange}
+              onChange={(e) => handleInputChange(e.target.value, setFrom, setFromSuggestions)}
             />
             {fromSuggestions.length > 0 && (
               <ul className="suggestions-list">
                 {fromSuggestions.map((suggestion, index) => (
-                  <li key={index} onClick={() => handleSuggestionClick(suggestion, setFrom)}>
+                  <li
+                    key={index}
+                    onClick={() => handleSuggestionClick(suggestion, setFrom, setFromSuggestions)}
+                  >
                     {suggestion}
                   </li>
                 ))}
               </ul>
             )}
           </div>
-          <div className="input-container">
+          <div className="search-input">
             <input
               type="text"
               placeholder="Going to"
               value={to}
-              onChange={handleToChange}
+              onChange={(e) => handleInputChange(e.target.value, setTo, setToSuggestions)}
             />
             {toSuggestions.length > 0 && (
               <ul className="suggestions-list">
                 {toSuggestions.map((suggestion, index) => (
-                  <li key={index} onClick={() => handleSuggestionClick(suggestion, setTo)}>
+                  <li
+                    key={index}
+                    onClick={() => handleSuggestionClick(suggestion, setTo, setToSuggestions)}
+                  >
                     {suggestion}
                   </li>
                 ))}
               </ul>
             )}
+          </div>
+          <div className="search-input">
+            <input
+              type="date"
+              placeholder="Date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+            />
+          </div>
+          <div className="search-input">
+            <input
+              type="number"
+              placeholder="Number of Persons"
+              value={persons}
+              min="1"
+              onChange={(e) => setPersons(e.target.value)}
+            />
           </div>
           <button onClick={handleSearch}>Search</button>
         </div>
@@ -132,16 +155,16 @@ function Dashboard() {
       </section>
 
       <section className="savings-section">
-        <img src="/public/dashboard.jpg" alt="Carpooling"/>
+        <img src="/dashboard.jpg" alt="Carpooling" />
         <div className="savings-content">
           <h2>Carpooling saves you money</h2>
           <p>Whether you are a car owner, bike owner, or rider, carpooling can help you save up to 80% on your commute.</p>
           <div className="savings-feature">
-            <img src="/public/carpool-graphic.png" alt="Car/Bike Owner" />
+            <img src="carpool-graphic.png" alt="Car/Bike Owner" />
             <p><strong>Car/Bike Owner:</strong> Save up to 75% on fuel and maintenance costs.</p>
           </div>
           <div className="savings-feature">
-            <img src="/public/carpool-graphic.png" alt="Riders" />
+            <img src="/carpool-graphic.png" alt="Riders" />
             <p><strong>Riders:</strong> Save up to 75% of your costs compared to cabs.</p>
           </div>
         </div>
@@ -151,7 +174,7 @@ function Dashboard() {
         <h2>Our best Travelling Routes</h2>
         <div className="routes-container">
           <div className="route-box">
-            <img src="/public/medak.jpg" alt="Route" />
+            <img src="/medak.jpg" alt="Route" />
             <div className="route-box-content">
               <h3>Hyderabad → Medak</h3>
               <p>Costs Ranges 300-500</p>
@@ -160,7 +183,7 @@ function Dashboard() {
             </div>
           </div>
           <div className="route-box">
-            <img src="/public/warangal.jpeg" alt="Route" />
+            <img src="/warangal.jpeg" alt="Route" />
             <div className="route-box-content">
               <h3>Secunderabad → Warangal</h3>
               <p>Cost Ranges 500-700</p>
@@ -169,7 +192,7 @@ function Dashboard() {
             </div>
           </div>
           <div className="route-box">
-            <img src="/public/vijayawada.jpg" alt="Route" />
+            <img src="/vijayawada.jpg" alt="Route" />
             <div className="route-box-content">
               <h3>Hyderabad → Vijayawada</h3>
               <p>Cost Ranges 800-1000</p>
