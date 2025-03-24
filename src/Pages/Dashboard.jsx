@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Dashboard.css'; // Import the Dashboard.css file for styling
 
-const locations = ['Hyderabad', 'Tamilnadu', 'Kerala', 'Bangalore', 'Mumbai', 'Delhi', 'Kolkata', 'Chennai', 'Vijayawada'];
+const locations = ['Hyderabad', 'Tamilnadu', 'Kerala', 'Bangalore', 'Mumbai', 'Delhi', 'Kolkata', 'Chennai', 'Vijayawada',
+  'arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand',
+  'Karnataka', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab',
+  'uttar prasdesh', 'Rajasthan','sikkim',
+ ];
 
 function Dashboard() {
   const [userData, setUserData] = useState(null);
@@ -48,16 +52,25 @@ function Dashboard() {
       return;
     }
 
-    if (from && to && date && persons) {
-      navigate('/ride-sharing', { state: { from, to, date, persons } });
-    } else {
+    if (!from || !to || !date || !persons) {
       alert('Please fill in all fields: "Leaving from", "Going to", "Date", and "Number of Persons".');
+      return;
     }
+
+    const selectedDate = new Date(date);
+    const currentDate = new Date();
+
+    if (selectedDate < currentDate.setHours(0, 0, 0, 0)) {
+      alert('Please select a current or future date.');
+      return;
+    }
+
+    navigate('/ride-sharing', { state: { from, to, date, persons } });
   };
 
   const handleInputChange = (value, setState, setSuggestions) => {
     setState(value);
-    if (value.length >= 2) {
+    if (value.length >= 1) {
       const filteredSuggestions = locations.filter((location) =>
         location.toLowerCase().startsWith(value.toLowerCase())
       );

@@ -47,6 +47,14 @@ function Register() {
       alert('Error: Please enter and confirm your password!');
       return false;
     }
+    if (step === 4 && formData.password.length < 8) {
+      alert('Error: Password must be at least 8 characters long!');
+      return false;
+    }
+    if (step === 4 && formData.password !== formData.confirmPassword) {
+      alert('Error: Passwords do not match!');
+      return false;
+    }
     return true;
   };
 
@@ -84,11 +92,6 @@ function Register() {
 
     if (formData.password !== formData.confirmPassword) {
       alert('Error: Passwords do not match!');
-      return;
-    }
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
-    if (!passwordRegex.test(formData.password)) {
-      alert('Error: Password must start with a capital letter, contain at least one number, one symbol, and be at least 8 characters long!');
       return;
     }
 
@@ -181,9 +184,25 @@ function Register() {
           )}
           {step === 4 && (
             <>
-              <input type="password" name="password" required placeholder="Create password" value={formData.password} onChange={handleChange} />
+              <input
+                type="password"
+                name="password"
+                required
+                placeholder="Create password"
+                value={formData.password}
+                onChange={handleChange}
+                minLength="8"
+              />
               <br /><br />
-              <input type="password" name="confirmPassword" required placeholder="Re-Enter Password" value={formData.confirmPassword} onChange={handleChange} />
+              <input
+                type="password"
+                name="confirmPassword"
+                required
+                placeholder="Re-Enter Password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                minLength="8"
+              />
               <br /><br />
               <button type="button" onClick={prevStep}>Back</button>
               <span style={{ margin: '0 10px' }}></span>
