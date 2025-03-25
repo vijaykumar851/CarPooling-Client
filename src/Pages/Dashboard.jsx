@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Dashboard.css'; // Import the Dashboard.css file for styling
 
-const locations = ['Hyderabad', 'Tamilnadu', 'Kerala', 'Bangalore', 'Mumbai', 'Delhi', 'Kolkata', 'Chennai', 'Vijayawada'];
+const locations = ['Hyderabad', 'Tamilnadu', 'Kerala', 'Bangalore', 'Mumbai', 'Delhi', 'Kolkata', 'Chennai', 'Vijayawada',
+  'arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand',
+  'Karnataka', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab',
+  'uttar prasdesh', 'Rajasthan','sikkim',
+ ];
 
 function Dashboard() {
   const [userData, setUserData] = useState(null);
@@ -10,9 +14,9 @@ function Dashboard() {
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
   const [date, setDate] = useState('');
-  const [passengerCount, setPassengerCount] = useState(1);
-  const [filteredFromLocations, setFilteredFromLocations] = useState([]);
-  const [filteredToLocations, setFilteredToLocations] = useState([]);
+  const [persons, setPersons] = useState(1);
+  const [fromSuggestions, setFromSuggestions] = useState([]);
+  const [toSuggestions, setToSuggestions] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,33 +52,37 @@ function Dashboard() {
       return;
     }
 
-    if (from && to && date && passengerCount) {
-      navigate('/ride-sharing', { state: { from, to, date, passengerCount } });
+    if (!from || !to || !date || !persons) {
+      alert('Please fill in all fields: "Leaving from", "Going to", "Date", and "Number of Persons".');
+      return;
+    }
+
+    const selectedDate = new Date(date);
+    const currentDate = new Date();
+
+    if (selectedDate < currentDate.setHours(0, 0, 0, 0)) {
+      alert('Please select a current or future date.');
+      return;
+    }
+
+    navigate('/ride-sharing', { state: { from, to, date, persons } });
+  };
+
+  const handleInputChange = (value, setState, setSuggestions) => {
+    setState(value);
+    if (value.length >= 1) {
+      const filteredSuggestions = locations.filter((location) =>
+        location.toLowerCase().startsWith(value.toLowerCase())
+      );
+      setSuggestions(filteredSuggestions);
     } else {
-      alert('Please fill in all fields.');
+      setSuggestions([]);
     }
   };
 
-  const handleFromChange = (e) => {
-    const value = e.target.value;
-    setFrom(value);
-    setFilteredFromLocations(locations.filter((location) => location.toLowerCase().includes(value.toLowerCase())));
-  };
-
-  const handleToChange = (e) => {
-    const value = e.target.value;
-    setTo(value);
-    setFilteredToLocations(locations.filter((location) => location.toLowerCase().includes(value.toLowerCase())));
-  };
-
-  const selectFromLocation = (location) => {
-    setFrom(location);
-    setFilteredFromLocations([]);
-  };
-
-  const selectToLocation = (location) => {
-    setTo(location);
-    setFilteredToLocations([]);
+  const handleSuggestionClick = (value, setState, setSuggestions) => {
+    setState(value);
+    setSuggestions([]);
   };
 
   return (
@@ -83,53 +91,63 @@ function Dashboard() {
         <h1>Your pick of rides at low prices</h1>
         <p>Find your perfect carpool match and save money on your commute.</p>
         <div className="search-bar">
-          <div className="autocomplete">
+          <div className="search-input">
             <input
               type="text"
               placeholder="Leaving from"
               value={from}
-              onChange={handleFromChange}
+              onChange={(e) => handleInputChange(e.target.value, setFrom, setFromSuggestions)}
             />
-            {filteredFromLocations.length > 0 && (
-              <ul className="autocomplete-list">
-                {filteredFromLocations.map((location, index) => (
-                  <li key={index} onClick={() => selectFromLocation(location)}>
-                    {location}
+            {fromSuggestions.length > 0 && (
+              <ul className="suggestions-list">
+                {fromSuggestions.map((suggestion, index) => (
+                  <li
+                    key={index}
+                    onClick={() => handleSuggestionClick(suggestion, setFrom, setFromSuggestions)}
+                  >
+                    {suggestion}
                   </li>
                 ))}
               </ul>
             )}
           </div>
-          <div className="autocomplete">
+          <div className="search-input">
             <input
               type="text"
               placeholder="Going to"
               value={to}
-              onChange={handleToChange}
+              onChange={(e) => handleInputChange(e.target.value, setTo, setToSuggestions)}
             />
-            {filteredToLocations.length > 0 && (
-              <ul className="autocomplete-list">
-                {filteredToLocations.map((location, index) => (
-                  <li key={index} onClick={() => selectToLocation(location)}>
-                    {location}
+            {toSuggestions.length > 0 && (
+              <ul className="suggestions-list">
+                {toSuggestions.map((suggestion, index) => (
+                  <li
+                    key={index}
+                    onClick={() => handleSuggestionClick(suggestion, setTo, setToSuggestions)}
+                  >
+                    {suggestion}
                   </li>
                 ))}
               </ul>
             )}
           </div>
-          <input
-            type="date"
-            placeholder="dd-mm-yyyy"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-          />
-          <input
-            type="number"
-            min="1"
-            placeholder="1"
-            value={passengerCount}
-            onChange={(e) => setPassengerCount(e.target.value)}
-          />
+          <div className="search-input">
+            <input
+              type="date"
+              placeholder="Date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+            />
+          </div>
+          <div className="search-input">
+            <input
+              type="number"
+              placeholder="Number of Persons"
+              value={persons}
+              min="1"
+              onChange={(e) => setPersons(e.target.value)}
+            />
+          </div>
           <button onClick={handleSearch}>Search</button>
         </div>
       </section>

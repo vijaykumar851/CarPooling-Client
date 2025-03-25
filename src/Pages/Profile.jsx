@@ -13,7 +13,6 @@ function Profile() {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
-    console.log('Fetched user from localStorage:', user); // Debug log
     if (user) {
       setUserData(user);
       setProfilePreview(user.profilePicture ? URL.createObjectURL(user.profilePicture) : null);

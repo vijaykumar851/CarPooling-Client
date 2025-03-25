@@ -1,67 +1,152 @@
-import React from 'react';
-import './ShareRide.css'; // Import a CSS file for styling
+import { useState, useEffect } from "react";
+import PropTypes from 'prop-types';
+import { useNavigate } from "react-router-dom";
+import './ShareRide.css';
 
-const ShareRide = () => {
-  // Predefined array of default rides
-  const defaultRides = [
-    {
-      id: 1,
-      driverName: 'Venkat Kumar',
-      from: 'Hyderabad',
-      to: 'Vijayawada',
-      price: 800,
-      seatsAvailable: 3,
-    },
-    {
-      id: 2,
-      driverName: 'Suresh Reddy',
-      from: 'Secunderabad',
-      to: 'Warangal',
-      price: 500,
-      seatsAvailable: 2,
-    },
-    {
-      id: 3,
-      driverName: 'yashwanth',
-      from: 'Bangalore',
-      to: 'Chennai',
-      price: 1000,
-      seatsAvailable: 4,
-    },
-    {
-      id: 4,
-      driverName: 'Ravi',
-      from: 'Hyderabad',
-      to: 'Chennai',
-      price: 1100,
-      seatsAvailable: 3,
-    },
-  ];
+const ShareRide = ({ user }) => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    source: "",
+    destination: "",
+    passengers: "",
+    date: "", // Add date to formData
+  });
 
-  const handleBooking = (rideId) => {
-    alert(`Booking ride with ID: ${rideId}`);
-    // Implement booking logic here
+  const [places] = useState([/* List of places */]);
+  const [filteredFromPlaces, setFilteredFromPlaces] = useState([]);
+  const [filteredToPlaces, setFilteredToPlaces] = useState([]);
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+
+  // Check if the user is logged in
+  useEffect(() => {
+    if (user) {
+      setIsUserLoggedIn(true);
+    }
+  }, [user]);
+
+  const handleFromChange = (e) => {
+    const value = e.target.value;
+    setFormData({ ...formData, source: value });
+    setFilteredFromPlaces(
+      value ? places.filter(place => place.toLowerCase().startsWith(value.toLowerCase())) : []
+    );
+  };
+
+  const handleToChange = (e) => {
+    const value = e.target.value;
+    setFormData({ ...formData, destination: value });
+    setFilteredToPlaces(
+      value ? places.filter(place => place.toLowerCase().startsWith(value.toLowerCase())) : []
+    );
+  };
+
+  const handlePlaceClick = (place, type) => {
+    if (type === 'from') {
+      setFormData({ ...formData, source: place });
+      setFilteredFromPlaces([]);
+    } else {
+      setFormData({ ...formData, destination: place });
+      setFilteredToPlaces([]);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!isUserLoggedIn) {
+      navigate('/ride-sharing');
+      return;
+    }
+
+    const selectedDate = new Date(formData.date);
+    const currentDate = new Date();
+
+    if (selectedDate < currentDate.setHours(0, 0, 0, 0)) {
+      alert("Please select a current or future date.");
+      return;
+    }
+
+    navigate('/ride-sharing', { state: { from: formData.source, to: formData.destination, date: formData.date, passengers: formData.passengers } });
   };
 
   return (
     <div className="share-ride-container">
-      <h1>Share a Ride</h1>
-      <div className="rides-list">
-        {defaultRides.map((ride) => (
-          <div key={ride.id} className="ride-box">
-            <h3>{ride.driverName}</h3>
-            <p><strong>From:</strong> {ride.from}</p>
-            <p><strong>To:</strong> {ride.to}</p>
-            <p><strong>Price:</strong> ₹{ride.price}</p>
-            <p><strong>Seats Available:</strong> {ride.seatsAvailable}</p>
-            <button onClick={() => handleBooking(ride.id)} className="book-button">
-              Book Now
-            </button>
+      <div className="share-ride-card">
+        <h2 className="title"> Share the ride with Joy </h2>
+        <form onSubmit={handleSubmit} className="share-ride-form">
+          <div className="input-container">
+            <input
+              type="text"
+              name="source"
+              value={formData.source}
+              onChange={handleFromChange}
+              placeholder="Leaving from"
+              className="input-field"
+              required
+            />
+            {filteredFromPlaces.length > 0 && (
+              <ul className="suggestions">
+                {filteredFromPlaces.map((place, index) => (
+                  <li key={index} onClick={() => handlePlaceClick(place, 'from')}>
+                    {place}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
-        ))}
+
+          <div className="input-container">
+            <input
+              type="text"
+              name="destination"
+              value={formData.destination}
+              onChange={handleToChange}
+              placeholder="Going to"
+              className="input-field"
+              required
+            />
+            {filteredToPlaces.length > 0 && (
+              <ul className="suggestions">
+                {filteredToPlaces.map((place, index) => (
+                  <li key={index} onClick={() => handlePlaceClick(place, 'to')}>
+                    {place}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <input
+            type="date"
+            name="date"
+            value={formData.date}
+            min={new Date().toISOString().split('T')[0]} // Set minimum date to today
+            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+            placeholder="Date"
+            className="input-field"
+            required
+          />
+
+          <input
+            type="number"
+            name="passengers"
+            value={formData.passengers}
+            onChange={(e) => setFormData({ ...formData, passengers: e.target.value })}
+            placeholder="Passengers"
+            className="input-field"
+            required
+          />
+
+          
+          
+
+          <button type="submit" className="submit-button">Search</button>
+        </form>
       </div>
     </div>
   );
+};
+
+ShareRide.propTypes = {
+  user: PropTypes.object
 };
 
 export default ShareRide;
