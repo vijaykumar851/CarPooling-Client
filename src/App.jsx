@@ -10,6 +10,9 @@ import Profile from './Pages/Profile.jsx';
 import RideSharing from './Pages/RideSharing.jsx'; 
 import ShareRide from './Pages/ShareRide.jsx';
 import ChangePassword from './Pages/ChangePassword.jsx'; 
+import Payment from './Pages/Payment.jsx';
+import { RideProvider } from './Context/RideContext';
+import RideHistory from './Pages/RideHistory.jsx';
 
 function ErrorPage() {
   return (
@@ -32,23 +35,27 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
-      <NavBar user={user} setUser={setUser} />
-      <main>
-        <Routes>
-          <Route path="/" element={<Navigate to="/dashboard" />} />
-          <Route path="/login" element={<Login setUser={setUser} />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/profile" element={<Profile />} /> {/* Add the profile route */}
-          <Route path="/ride-sharing" element={<RideSharing />} /> {/* Add the ride-sharing route */}
-          <Route path="/share-ride" element={<ShareRide />} /> {/* Add the share-ride route */}
-          <Route path="/change-password" element={<ChangePassword />} /> {/* Add the change-password route */}
-          <Route path="*" element={<ErrorPage />} />
-        </Routes>
-        <Footer />
-      </main>
-    </BrowserRouter>
+    <RideProvider> {/* Wrap the App with RideProvider */}
+      <BrowserRouter>
+        <NavBar user={user} setUser={setUser} />
+        <main>
+          <Routes>
+            <Route path="/" element={<Navigate to="/dashboard" />} />
+            <Route path="/login" element={<Login setUser={setUser} />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/profile" element={<Profile />} /> {/* Add the profile route */}
+            <Route path="/ride-sharing" element={<RideSharing />} /> {/* Add the ride-sharing route */}
+            <Route path="/share-ride" element={<ShareRide />} /> {/* Add the share-ride route */}
+            <Route path="/change-password" element={<ChangePassword />} /> {/* Add the change-password route */}
+            <Route path="/payment" element={<Payment />} /> 
+            <Route path="ride-history" element={<RideHistory/>} />
+            <Route path="*" element={<ErrorPage />} />
+          </Routes>
+          <Footer />
+        </main>
+      </BrowserRouter>
+    </RideProvider>
   );
 }
 

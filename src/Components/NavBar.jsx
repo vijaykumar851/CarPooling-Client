@@ -32,9 +32,10 @@ function NavBar({ user, setUser }) {
         {user ? (
           <>
             <NavLink className='item2' to="/share-ride"><li>Share a Ride</li></NavLink>
+            <NavLink className='item2' to="/ride-history"><li>Ride History</li></NavLink>
             <div className="profile-container">
               <img
-                src="/path/to/profile-image.png" // Replace with the path to your profile image
+                src="image1.png" // Replace with the path to your profile image
                 alt="Profile"
                 className="profile-image"
                 onClick={toggleDropdown}
