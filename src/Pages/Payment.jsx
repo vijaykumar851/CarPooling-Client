@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import './Payment.css';
 
 const PayPalButton = ({ amount = "10.00" }) => {
   const [success, setSuccess] = useState(false);

@@ -217,3 +217,10 @@ body {
 #booking:hover{
     background-color: #f04138;
 }
+.driver-image {
+  width: 70px; /* Set the width to 5px */
+  height: 70px; /* Set the height to 5px */
+  border-radius: 50%; /* Make the image circular */
+  margin-right: 10px; /* Add spacing between the image and text */
+  border: 1px solid #ccc; /* Optional: Add a border around the image */
+}

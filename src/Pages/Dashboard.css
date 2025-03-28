@@ -10,7 +10,7 @@
     padding: 100px 20px;
     background-color: #f4f4f4;
     width: 100%;
-    background-image: url('/imagecar.png'); /* Set the background image */
+    background-image: url('./imagecar.png'); /* Set the background image */
     background-size: cover; /* Ensure the image covers the entire section */
     background-position: center; /* Center the image */
     background-repeat: no-repeat; /* Do not repeat the image */
@@ -207,3 +207,38 @@
   .suggestions-list li:hover {
     background-color: #f4f4f4;
   }
+  .post-ride-section,
+.match-ride-section,
+.messages-section {
+  margin-top: 20px;
+  padding: 20px;
+  border-top: 1px solid #ddd;
+}
+
+.my-ride-details {
+  margin-top: 10px;
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.messages-container {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #f1f1f1;
+  border-radius: 8px;
+}
+
+.message {
+  margin-bottom: 8px;
+  padding: 6px;
+  background-color: #e2f3ff;
+  border-radius: 5px;
+}
+
+input,
+button {
+  margin-top: 10px;
+}

@@ -1,152 +1,249 @@
 import { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
 import { useNavigate } from "react-router-dom";
+import { useRideContext } from "../Context/RideContext";
 import './ShareRide.css';
 
 const ShareRide = ({ user }) => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    source: "",
-    destination: "",
-    passengers: "",
-    date: "", // Add date to formData
+  const { addRide } = useRideContext(); // Access the addRide function from context
+  const [newRide, setNewRide] = useState({
+    from: "",
+    to: "",
+    date: "",
+    time: "",
+    seats: "",
+    price: "",
+    driverName: user?.name || "", // Default to the logged-in user's name
+    driverImage: "", // Base64 or URL for the driver's image
+    preferences: {
+      smoking: false,
+      pets: false,
+      music: false,
+      luggage: false,
+    },
   });
 
-  const [places] = useState([/* List of places */]);
-  const [filteredFromPlaces, setFilteredFromPlaces] = useState([]);
-  const [filteredToPlaces, setFilteredToPlaces] = useState([]);
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Check if the user is logged in
-  useEffect(() => {
-    if (user) {
-      setIsUserLoggedIn(true);
-    }
-  }, [user]);
-
-  const handleFromChange = (e) => {
-    const value = e.target.value;
-    setFormData({ ...formData, source: value });
-    setFilteredFromPlaces(
-      value ? places.filter(place => place.toLowerCase().startsWith(value.toLowerCase())) : []
-    );
+  const handleNewRideInputChange = (field, value) => {
+    setNewRide({ ...newRide, [field]: value });
   };
 
-  const handleToChange = (e) => {
-    const value = e.target.value;
-    setFormData({ ...formData, destination: value });
-    setFilteredToPlaces(
-      value ? places.filter(place => place.toLowerCase().startsWith(value.toLowerCase())) : []
-    );
+  const handleNewRidePreferenceChange = (preference) => {
+    setNewRide((prevRide) => ({
+      ...prevRide,
+      preferences: {
+        ...prevRide.preferences,
+        [preference]: !prevRide.preferences[preference],
+      },
+    }));
   };
 
-  const handlePlaceClick = (place, type) => {
-    if (type === 'from') {
-      setFormData({ ...formData, source: place });
-      setFilteredFromPlaces([]);
-    } else {
-      setFormData({ ...formData, destination: place });
-      setFilteredToPlaces([]);
+  const handleNonePreference = () => {
+    setNewRide((prevRide) => ({
+      ...prevRide,
+      preferences: {
+        smoking: false,
+        pets: false,
+        music: false,
+        luggage: false,
+      },
+    }));
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setNewRide((prevRide) => ({
+          ...prevRide,
+          driverImage: reader.result, // Save the Base64 string of the image
+        }));
+      };
+      reader.readAsDataURL(file);
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!isUserLoggedIn) {
-      navigate('/ride-sharing');
-      return;
-    }
-
-    const selectedDate = new Date(formData.date);
-    const currentDate = new Date();
-
-    if (selectedDate < currentDate.setHours(0, 0, 0, 0)) {
-      alert("Please select a current or future date.");
-      return;
-    }
-
-    navigate('/ride-sharing', { state: { from: formData.source, to: formData.destination, date: formData.date, passengers: formData.passengers } });
+  const handlePostRide = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      addRide(newRide); // Add the ride to the shared state
+      alert("Ride posted successfully!");
+      setIsLoading(false);
+      setNewRide({
+        from: "",
+        to: "",
+        date: "",
+        time: "",
+        seats: "",
+        price: "",
+        driverName: user?.name || "",
+        driverImage: "",
+        preferences: {
+          smoking: false,
+          pets: false,
+          music: false,
+          luggage: false,
+        },
+      });
+      navigate('/ride-sharing'); // Redirect to RideSharing page
+    }, 2000);
   };
 
   return (
-    <div className="share-ride-container">
-      <div className="share-ride-card">
-        <h2 className="title"> Share the ride with Joy </h2>
-        <form onSubmit={handleSubmit} className="share-ride-form">
-          <div className="input-container">
+    <div className="post-ride-container">
+      <h2>Offer a Ride</h2>
+      <div className="post-ride-form">
+        <div className="form-row">
+          <div className="form-group">
+            <label>From</label>
             <input
               type="text"
-              name="source"
-              value={formData.source}
-              onChange={handleFromChange}
-              placeholder="Leaving from"
-              className="input-field"
-              required
+              placeholder="Departure city"
+              value={newRide.from}
+              onChange={(e) => handleNewRideInputChange('from', e.target.value)}
             />
-            {filteredFromPlaces.length > 0 && (
-              <ul className="suggestions">
-                {filteredFromPlaces.map((place, index) => (
-                  <li key={index} onClick={() => handlePlaceClick(place, 'from')}>
-                    {place}
-                  </li>
-                ))}
-              </ul>
-            )}
           </div>
-
-          <div className="input-container">
+          <div className="form-group">
+            <label>To</label>
             <input
               type="text"
-              name="destination"
-              value={formData.destination}
-              onChange={handleToChange}
-              placeholder="Going to"
-              className="input-field"
-              required
+              placeholder="Destination city"
+              value={newRide.to}
+              onChange={(e) => handleNewRideInputChange('to', e.target.value)}
             />
-            {filteredToPlaces.length > 0 && (
-              <ul className="suggestions">
-                {filteredToPlaces.map((place, index) => (
-                  <li key={index} onClick={() => handlePlaceClick(place, 'to')}>
-                    {place}
-                  </li>
-                ))}
-              </ul>
+          </div>
+        </div>
+
+        <div className="form-row">
+          <div className="form-group">
+            <label>Date</label>
+            <input
+              type="date"
+              value={newRide.date}
+              onChange={(e) => handleNewRideInputChange('date', e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label>Time</label>
+            <input
+              type="time"
+              value={newRide.time}
+              onChange={(e) => handleNewRideInputChange('time', e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="form-row">
+          <div className="form-group">
+            <label>Available Seats</label>
+            <input
+              type="number"
+              min="1"
+              max="8"
+              value={newRide.seats}
+              onChange={(e) => handleNewRideInputChange('seats', e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label>Price per Seat (₹)</label>
+            <input
+              type="number"
+              min="0"
+              placeholder="Price in rupees"
+              value={newRide.price}
+              onChange={(e) => handleNewRideInputChange('price', e.target.value)}
+            />
+          </div>
+        </div>
+
+        {/* Driver Details Section */}
+        <div className="form-row">
+          <div className="form-group">
+            <label>Driver Name</label>
+            <input
+              type="text"
+              placeholder="Driver's name"
+              value={newRide.driverName}
+              onChange={(e) => handleNewRideInputChange('driverName', e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label>Driver Image</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+            />
+            {newRide.driverImage && (
+              <img
+                src={newRide.driverImage}
+                alt="Driver"
+                className="driver-image-preview"
+              />
             )}
           </div>
-          <input
-            type="date"
-            name="date"
-            value={formData.date}
-            min={new Date().toISOString().split('T')[0]} // Set minimum date to today
-            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-            placeholder="Date"
-            className="input-field"
-            required
-          />
+        </div>
 
-          <input
-            type="number"
-            name="passengers"
-            value={formData.passengers}
-            onChange={(e) => setFormData({ ...formData, passengers: e.target.value })}
-            placeholder="Passengers"
-            className="input-field"
-            required
-          />
+        {/* Preferences Section */}
+        <div className="form-group">
+          <label>Ride Preferences</label>
+          <div className="preferences-options">
+            <div
+              className={`preference-option ${newRide.preferences.smoking ? 'active' : ''}`}
+              onClick={() => handleNewRidePreferenceChange('smoking')}
+            >
+              <span className="preference-icon">🚬</span>
+              <span>Smoking allowed</span>
+            </div>
+            <div
+              className={`preference-option ${newRide.preferences.pets ? 'active' : ''}`}
+              onClick={() => handleNewRidePreferenceChange('pets')}
+            >
+              <span className="preference-icon">🐾</span>
+              <span>Pets allowed</span>
+            </div>
+            <div
+              className={`preference-option ${newRide.preferences.music ? 'active' : ''}`}
+              onClick={() => handleNewRidePreferenceChange('music')}
+            >
+              <span className="preference-icon">🎵</span>
+              <span>Music</span>
+            </div>
+            <div
+              className={`preference-option ${newRide.preferences.luggage ? 'active' : ''}`}
+              onClick={() => handleNewRidePreferenceChange('luggage')}
+            >
+              <span className="preference-icon">🧳</span>
+              <span>Extra luggage</span>
+            </div>
+            {/* None Option */}
+            <div
+              className="preference-option none-option"
+              onClick={handleNonePreference}
+            >
+              <span className="preference-icon">❌</span>
+              <span>None</span>
+            </div>
+          </div>
+        </div>
 
-          
-          
-
-          <button type="submit" className="submit-button">Search</button>
-        </form>
+        <button
+          className="post-ride-button"
+          onClick={handlePostRide}
+          disabled={isLoading}
+        >
+          {isLoading ? 'Posting...' : 'Publish Ride'}
+        </button>
       </div>
     </div>
   );
 };
 
 ShareRide.propTypes = {
-  user: PropTypes.object
+  user: PropTypes.object,
 };
 
 export default ShareRide;
