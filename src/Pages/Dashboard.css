@@ -1,3 +1,4 @@
+@import "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
 .dashboard-container {
     text-align: center;
     padding: 50px 20px;
@@ -10,11 +11,10 @@
     padding: 100px 20px;
     background-color: #f4f4f4;
     width: 100%;
-
-    background-image: url('/backgroundimage.png'); /* Set the background image */
-    background-size: cover; 
-    background-position: center; 
-    background-repeat: no-repeat; 
+    background-image: url('./imagecar.png'); /* Set the background image */
+    background-size: cover; /* Ensure the image covers the entire section */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
 }
 
 .hero-section h1 {
@@ -186,7 +186,6 @@
     font-size: 16px;
     margin: 0;
 }
-
 .suggestions-list {
     list-style: none;
     margin: 0;
@@ -209,33 +208,38 @@
   .suggestions-list li:hover {
     background-color: #f4f4f4;
   }
+  .post-ride-section,
+.match-ride-section,
+.messages-section {
+  margin-top: 20px;
+  padding: 20px;
+  border-top: 1px solid #ddd;
+}
 
-  .autocomplete {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .autocomplete-list {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    max-height: 150px;
-    overflow-y: auto;
-    z-index: 1000;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .autocomplete-list li {
-    padding: 10px;
-    cursor: pointer;
-  }
-  
-  .autocomplete-list li:hover {
-    background-color: #f0f0f0;
-  }
+.my-ride-details {
+  margin-top: 10px;
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.messages-container {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #f1f1f1;
+  border-radius: 8px;
+}
+
+.message {
+  margin-bottom: 8px;
+  padding: 6px;
+  background-color: #e2f3ff;
+  border-radius: 5px;
+}
+
+input,
+button {
+  margin-top: 10px;
+}

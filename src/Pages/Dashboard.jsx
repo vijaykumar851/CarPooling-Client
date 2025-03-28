@@ -65,7 +65,7 @@ function Dashboard() {
       return;
     }
 
-    navigate('/ride-sharing', { state: { from, to, date, persons } });
+    navigate('/ride-sharing', { state: { from, to } });
   };
 
   const handleInputChange = (value, setState, setSuggestions) => {

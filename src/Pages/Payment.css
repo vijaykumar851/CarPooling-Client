@@ -1,0 +1,37 @@
+/* Container for the PayPal payment section */
+.paypal-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Heading for the payment section */
+  .paypal-container h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* Success message styling */
+  .paypal-container p {
+    font-size: 16px;
+    margin-top: 20px;
+  }
+  
+  /* Success message */
+  .paypal-container p[style*="color: green"] {
+    color: #28a745;
+    font-weight: bold;
+  }
+  
+  /* Error message */
+  .paypal-container p[style*="color: red"] {
+    color: #dc3545;
+    font-weight: bold;
+  }
