@@ -1,226 +1,40 @@
-/* styles.css */
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Header */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.header h1 {
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.publish-btn {
-  background-color: #007bff;
-  color: white;
-  padding: 10px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-/* Search Bar */
-.search-bar {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.search-bar input,
-.search-bar button {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-.search-btn {
-  background-color: #28a745;
-  color: white;
-  cursor: pointer;
-}
-
-/* Sorting Options */
-.sort-options {
-  margin: 20px 0;
-}
-
-.sort-options label {
-  margin-right: 15px;
-  font-size: 14px;
-}
-
-/* Ride Cards */
-.ride-card {
-  background-color: #fff;
-  border: 1px solid #e0e0e0;
-  padding: 16px;
-  border-radius: 8px;
-  display: flex;
-  justify-content: space-between;
-  margin-top: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.ride-card p {
-  margin: 4px 0;
-}
-
-.ride-card .ride-time {
-  font-weight: bold;
-}
-
-.ride-card .ride-price {
-  font-size: 18px;
-  color: #007bff;
-  font-weight: bold;
-}
-
-/* Auto Suggestions */
-.suggestions {
-  position: absolute;
-  background-color: white;
-  border: 1px solid #ccc;
-  max-height: 150px;
-  overflow-y: auto;
-  width: 90%;
-  z-index: 10;
-  border-radius: 4px;
-}
-
-.suggestions div {
-  padding: 10px;
-  cursor: pointer;
-}
-
-.suggestions div:hover {
-  background-color: #f1f1f1;
-}
-
-/* Container */
 .ride-sharing-container {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  font-family: Arial, sans-serif;
-  color: #333;
-}
-
-/* Header */
-.ride-sharing-container h1 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #007bff;
-}
-
-/* Filters Section */
-.filters {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-  gap: 10px;
-  
-  
-}
-
-.sort-filter,
-.price-filter {
-  flex: 1;
-}
-
-.sort-filter label,
-.price-filter label {
-  display: block;
-  margin-top: 5px;
-  font-weight: bold;
-  
-  
-  
-}
-
-.sort-filter select,
-.price-filter input {
-  width: 100%;
-  padding: 8px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-  outline: none; 
-  
-}
-
-/* Ride List */
-.ride-card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px;
-  margin-bottom: 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
   background-color: #f9f9f9;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.ride-card p {
-  margin: 5px 0;
-}
-
-.ride-card strong {
-  color: #007bff;
-}
-
-/* No Rides Message */
-.ride-sharing-container p {
+h1 {
   text-align: center;
-  font-size: 16px;
-  color: #666;
+  margin-bottom: 20px;
 }
 
-/* Responsive Design */
-@media (max-width: 600px) {
-  .filters {
-    flex-direction: column;
-  }
+.ride-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: #fff;
+}
 
-  .ride-card {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+.driver-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
 }
-#booking{
-  padding-top: 10px;
-  padding: 5px 5px;
-  text-decoration: none;
-  justify-content: center;
-  padding-right: 5px;
-  background-color: #d60648;
-  cursor: pointer;
-  color: white;
-  border-radius: 5px;
-  
-}
-#booking:hover{
-  background-color: #f04138;
-}
+
 .driver-image {
-width: 70px; /* Set the width to 5px */
-height: 70px; /* Set the height to 5px */
-border-radius: 50%; /* Make the image circular */
-margin-right: 10px; /* Add spacing between the image and text */
-border: 1px solid #ccc; /* Optional: Add a border around the image */
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.ride-details p {
+  margin: 5px 0;
+  font-size: 16px;
+  color: #333;
 }

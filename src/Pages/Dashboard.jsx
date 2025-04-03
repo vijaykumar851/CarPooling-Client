@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Dashboard.css'; // Import the Dashboard.css file for styling
 
-const locations = ['Hyderabad', 'Tamilnadu', 'Kerala', 'Bangalore', 'Mumbai', 'Delhi', 'Kolkata', 'Chennai', 'Vijayawada',
-  'arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand',
+const locations = [
+  'Hyderabad', 'Tamilnadu', 'Kerala', 'Bangalore', 'Mumbai', 'Delhi', 'Kolkata', 'Chennai', 'Vijayawada',
+  'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand',
   'Karnataka', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab',
-  'uttar prasdesh', 'Rajasthan','sikkim',
- ];
+  'Uttar Pradesh', 'Rajasthan', 'Sikkim',
+];
 
 function Dashboard() {
   const [userData, setUserData] = useState(null);
@@ -25,6 +26,13 @@ function Dashboard() {
         const user = JSON.parse(localStorage.getItem('user'));
         if (user) {
           setUserData(user);
+
+          // Redirect to ShareRide page if the user is a driver
+          if (user.role === 'driver') {
+            navigate('/share-ride');
+          }
+        } else {
+          navigate('/login'); // Redirect to login if no user is logged in
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -43,7 +51,7 @@ function Dashboard() {
 
     fetchUserData();
     fetchRides();
-  }, []);
+  }, [navigate]);
 
   const handleSearch = () => {
     if (!userData) {
@@ -65,7 +73,7 @@ function Dashboard() {
       return;
     }
 
-    navigate('/ride-sharing', { state: { from, to } });
+    navigate('/ride-sharing');
   };
 
   const handleInputChange = (value, setState, setSuggestions) => {
@@ -84,6 +92,10 @@ function Dashboard() {
     setState(value);
     setSuggestions([]);
   };
+
+  if (userData?.role === 'driver') {
+    return null; // Prevent rendering the dashboard if the user is a driver (redirect happens in useEffect)
+  }
 
   return (
     <div className="dashboard-container">
@@ -167,22 +179,6 @@ function Dashboard() {
         </div>
       </section>
 
-      <section className="savings-section">
-        <img src="/dashboard.jpg" alt="Carpooling" />
-        <div className="savings-content">
-          <h2>Carpooling saves you money</h2>
-          <p>Whether you are a car owner, bike owner, or rider, carpooling can help you save up to 80% on your commute.</p>
-          <div className="savings-feature">
-            <img src="carpool-graphic.png" alt="Car/Bike Owner" />
-            <p><strong>Car/Bike Owner:</strong> Save up to 75% on fuel and maintenance costs.</p>
-          </div>
-          <div className="savings-feature">
-            <img src="/carpool-graphic.png" alt="Riders" />
-            <p><strong>Riders:</strong> Save up to 75% of your costs compared to cabs.</p>
-          </div>
-        </div>
-      </section>
-
       <section className="best-routes-section">
         <h2>Our best Travelling Routes</h2>
         <div className="routes-container">
@@ -191,7 +187,6 @@ function Dashboard() {
             <div className="route-box-content">
               <h3>Hyderabad → Medak</h3>
               <p>Costs Ranges 300-500</p>
-              <p className="price">...</p>
               <span className="arrow">→</span>
             </div>
           </div>
@@ -200,7 +195,6 @@ function Dashboard() {
             <div className="route-box-content">
               <h3>Secunderabad → Warangal</h3>
               <p>Cost Ranges 500-700</p>
-              <p className="price">...</p>
               <span className="arrow">→</span>
             </div>
           </div>
@@ -209,7 +203,6 @@ function Dashboard() {
             <div className="route-box-content">
               <h3>Hyderabad → Vijayawada</h3>
               <p>Cost Ranges 800-1000</p>
-              <p className="price">...</p>
               <span className="arrow">→</span>
             </div>
           </div>

@@ -31,8 +31,10 @@ function NavBar({ user, setUser }) {
         <NavLink className='item2' to="/dashboard"><li>Dashboard</li></NavLink>
         {user ? (
           <>
-            <NavLink className='item2' to="/share-ride"><li>Share a Ride</li></NavLink>
+          {user.role === 'driver' && (
+            <NavLink className='item2' to="/share-ride"><li>Share a Ride</li></NavLink>)}
             <NavLink className='item2' to="/ride-history"><li>Ride History</li></NavLink>
+            
             <div className="profile-container">
               <img
                 src="image1.png" // Replace with the path to your profile image

@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-
+import MapPage from './Pages/MapPage.jsx';
 import NavBar from './Components/NavBar.jsx';
 import Login from './Pages/Login.jsx';
 import Register from './Pages/Register.jsx';
@@ -50,6 +50,7 @@ function App() {
             <Route path="/change-password" element={<ChangePassword />} /> {/* Add the change-password route */}
             <Route path="/payment" element={<Payment />} /> 
             <Route path="ride-history" element={<RideHistory/>} />
+            <Route path="/map" element={<MapPage />} /> {/* Add the map route */}
             <Route path="*" element={<ErrorPage />} />
           </Routes>
           <Footer />

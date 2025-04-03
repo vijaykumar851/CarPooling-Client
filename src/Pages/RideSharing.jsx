@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRideContext } from "../Context/RideContext";
 import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
 import './RideSharing.css';
@@ -6,10 +6,41 @@ import './RideSharing.css';
 const RideSharing = () => {
   const { rides } = useRideContext(); // Access rides from context
   const navigate = useNavigate(); // Initialize navigate for redirection
+  const [userData, setUserData] = useState(null); // Store logged-in user data
+
+  useEffect(() => {
+    // Fetch logged-in user data
+    const fetchUserData = async () => {
+      try {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+          setUserData(user);
+        } else {
+          navigate('/login'); // Redirect to login if no user is logged in
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, [navigate]);
 
   const handleBookNow = (ride) => {
+    if (!userData) {
+      alert('Please log in to book a ride.');
+      navigate('/login'); // Redirect to login page if not logged in
+      return;
+    }
     // Redirect to the payment page with the selected ride's details
     navigate('/payment', { state: { ride } });
+  };
+
+  // Function to format time with AM/PM
+  const formatTimeWithPeriod = (time, period) => {
+    const [hours, minutes] = time.split(':').map(Number);
+    const formattedHours = hours % 12 || 12; // Convert 0 to 12 for 12-hour format
+    return `${formattedHours}:${minutes.toString().padStart(2, '0')} ${period}`;
   };
 
   return (
@@ -37,7 +68,7 @@ const RideSharing = () => {
                 <strong>From:</strong> {ride.from} <strong>To:</strong> {ride.to}
               </p>
               <p>
-                <strong>Date:</strong> {ride.date} <strong>Time:</strong> {ride.time}
+                <strong>Date:</strong> {ride.date} <strong>Time:</strong> {formatTimeWithPeriod(ride.time, ride.period || 'AM')}
               </p>
               <p>
                 <strong>Seats:</strong> {ride.seats} <strong>Price:</strong> ₹{ride.price}
@@ -50,15 +81,17 @@ const RideSharing = () => {
                 {ride.preferences.luggage && '🧳 Luggage'}
               </p>
             </div>
-            {/* Separate Book Now Button Section */}
-            <div className="book-now-section">
-              <button
-                className="book-now-button"
-                onClick={() => handleBookNow(ride)}
-              >
-                Book Now
-              </button>
-            </div>
+            {/* Conditionally Render Book Now Button */}
+            {userData?.role === 'rider' && (
+              <div className="book-now-section">
+                <button
+                  className="book-now-button"
+                  onClick={() => handleBookNow(ride)}
+                >
+                  Book Now
+                </button>
+              </div>
+            )}
           </div>
         ))
       ) : (

@@ -1,0 +1,17 @@
+.summary-section {
+    margin-bottom: 30px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #e9f7ef;
+  }
+  
+  .summary-section h2 {
+    margin-bottom: 10px;
+    color: #2c7a7b;
+  }
+  
+  .summary-section p {
+    font-size: 16px;
+    margin: 5px 0;
+  }

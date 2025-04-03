@@ -1,12 +1,13 @@
-import { useState, useEffect } from "react";
-import PropTypes from 'prop-types';
+import { useState } from "react";
+import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { useRideContext } from "../Context/RideContext";
-import './ShareRide.css';
+import "./ShareRide.css";
 
 const ShareRide = ({ user }) => {
   const navigate = useNavigate();
   const { addRide } = useRideContext(); // Access the addRide function from context
+
   const [newRide, setNewRide] = useState({
     from: "",
     to: "",
@@ -26,8 +27,50 @@ const ShareRide = ({ user }) => {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  // List of predefined places for auto-suggestions
+  const places = ["Hyderabad","Bangalore","Chennai","Mumbai","Delhi","Pune",
+    "Kolkata","Vijayawada","Warangal","Medak","Goa","Jaipur","Lucknow","Ahmedabad",
+    "Surat",'visakhapatam','tirupati','rajahmundry','nizamabad','kakinada'];
+
+  const [fromSuggestions, setFromSuggestions] = useState([]);
+  const [toSuggestions, setToSuggestions] = useState([]);
+
   const handleNewRideInputChange = (field, value) => {
     setNewRide({ ...newRide, [field]: value });
+
+    if(field === "seats" && value > 7) {
+      alert("you can only select a maximum of 7 seats");
+      return;
+    }
+    
+
+    if (field === "from") {
+      if (value.length >= 1) {
+        const filteredSuggestions = places.filter((place) =>
+          place.toLowerCase().startsWith(value.toLowerCase())
+        );
+        setFromSuggestions(filteredSuggestions);
+      } else {
+        setFromSuggestions([]);
+      }
+    }
+
+    if (field === "to") {
+      if (value.length >= 1) {
+        const filteredSuggestions = places.filter((place) =>
+          place.toLowerCase().startsWith(value.toLowerCase())
+        );
+        setToSuggestions(filteredSuggestions);
+      } else {
+        setToSuggestions([]);
+      }
+    }
+  };
+
+  const handleSuggestionClick = (field, value) => {
+    setNewRide({ ...newRide, [field]: value });
+    if (field === "from") setFromSuggestions([]);
+    if (field === "to") setToSuggestions([]);
   };
 
   const handleNewRidePreferenceChange = (preference) => {
@@ -88,7 +131,7 @@ const ShareRide = ({ user }) => {
           luggage: false,
         },
       });
-      navigate('/ride-sharing'); // Redirect to RideSharing page
+      navigate("/ride-sharing"); // Redirect to RideSharing page
     }, 2000);
   };
 
@@ -103,8 +146,20 @@ const ShareRide = ({ user }) => {
               type="text"
               placeholder="Departure city"
               value={newRide.from}
-              onChange={(e) => handleNewRideInputChange('from', e.target.value)}
+              onChange={(e) => handleNewRideInputChange("from", e.target.value)}
             />
+            {fromSuggestions.length > 0 && (
+              <ul className="suggestions-list">
+                {fromSuggestions.map((suggestion, index) => (
+                  <li
+                    key={index}
+                    onClick={() => handleSuggestionClick("from", suggestion)}
+                  >
+                    {suggestion}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
           <div className="form-group">
             <label>To</label>
@@ -112,8 +167,20 @@ const ShareRide = ({ user }) => {
               type="text"
               placeholder="Destination city"
               value={newRide.to}
-              onChange={(e) => handleNewRideInputChange('to', e.target.value)}
+              onChange={(e) => handleNewRideInputChange("to", e.target.value)}
             />
+            {toSuggestions.length > 0 && (
+              <ul className="suggestions-list">
+                {toSuggestions.map((suggestion, index) => (
+                  <li
+                    key={index}
+                    onClick={() => handleSuggestionClick("to", suggestion)}
+                  >
+                    {suggestion}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
 
@@ -123,7 +190,7 @@ const ShareRide = ({ user }) => {
             <input
               type="date"
               value={newRide.date}
-              onChange={(e) => handleNewRideInputChange('date', e.target.value)}
+              onChange={(e) => handleNewRideInputChange("date", e.target.value)}
             />
           </div>
           <div className="form-group">
@@ -131,7 +198,7 @@ const ShareRide = ({ user }) => {
             <input
               type="time"
               value={newRide.time}
-              onChange={(e) => handleNewRideInputChange('time', e.target.value)}
+              onChange={(e) => handleNewRideInputChange("time", e.target.value)}
             />
           </div>
         </div>
@@ -142,9 +209,9 @@ const ShareRide = ({ user }) => {
             <input
               type="number"
               min="1"
-              max="8"
+              max="7"
               value={newRide.seats}
-              onChange={(e) => handleNewRideInputChange('seats', e.target.value)}
+              onChange={(e) => handleNewRideInputChange("seats", e.target.value)}
             />
           </div>
           <div className="form-group">
@@ -154,12 +221,11 @@ const ShareRide = ({ user }) => {
               min="0"
               placeholder="Price in rupees"
               value={newRide.price}
-              onChange={(e) => handleNewRideInputChange('price', e.target.value)}
+              onChange={(e) => handleNewRideInputChange("price", e.target.value)}
             />
           </div>
         </div>
 
-        {/* Driver Details Section */}
         <div className="form-row">
           <div className="form-group">
             <label>Driver Name</label>
@@ -167,7 +233,9 @@ const ShareRide = ({ user }) => {
               type="text"
               placeholder="Driver's name"
               value={newRide.driverName}
-              onChange={(e) => handleNewRideInputChange('driverName', e.target.value)}
+              onChange={(e) =>
+                handleNewRideInputChange("driverName", e.target.value)
+              }
             />
           </div>
           <div className="form-group">
@@ -187,39 +255,45 @@ const ShareRide = ({ user }) => {
           </div>
         </div>
 
-        {/* Preferences Section */}
         <div className="form-group">
           <label>Ride Preferences</label>
           <div className="preferences-options">
             <div
-              className={`preference-option ${newRide.preferences.smoking ? 'active' : ''}`}
-              onClick={() => handleNewRidePreferenceChange('smoking')}
+              className={`preference-option ${
+                newRide.preferences.smoking ? "active" : ""
+              }`}
+              onClick={() => handleNewRidePreferenceChange("smoking")}
             >
               <span className="preference-icon">🚬</span>
               <span>Smoking allowed</span>
             </div>
             <div
-              className={`preference-option ${newRide.preferences.pets ? 'active' : ''}`}
-              onClick={() => handleNewRidePreferenceChange('pets')}
+              className={`preference-option ${
+                newRide.preferences.pets ? "active" : ""
+              }`}
+              onClick={() => handleNewRidePreferenceChange("pets")}
             >
               <span className="preference-icon">🐾</span>
               <span>Pets allowed</span>
             </div>
             <div
-              className={`preference-option ${newRide.preferences.music ? 'active' : ''}`}
-              onClick={() => handleNewRidePreferenceChange('music')}
+              className={`preference-option ${
+                newRide.preferences.music ? "active" : ""
+              }`}
+              onClick={() => handleNewRidePreferenceChange("music")}
             >
               <span className="preference-icon">🎵</span>
               <span>Music</span>
             </div>
             <div
-              className={`preference-option ${newRide.preferences.luggage ? 'active' : ''}`}
-              onClick={() => handleNewRidePreferenceChange('luggage')}
+              className={`preference-option ${
+                newRide.preferences.luggage ? "active" : ""
+              }`}
+              onClick={() => handleNewRidePreferenceChange("luggage")}
             >
               <span className="preference-icon">🧳</span>
               <span>Extra luggage</span>
             </div>
-            {/* None Option */}
             <div
               className="preference-option none-option"
               onClick={handleNonePreference}
@@ -235,7 +309,7 @@ const ShareRide = ({ user }) => {
           onClick={handlePostRide}
           disabled={isLoading}
         >
-          {isLoading ? 'Posting...' : 'Publish Ride'}
+          {isLoading ? "Posting..." : "Publish Ride"}
         </button>
       </div>
     </div>
