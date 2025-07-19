@@ -32,8 +32,7 @@ const RideSharing = () => {
       navigate('/login'); // Redirect to login page if not logged in
       return;
     }
-    // Redirect to the payment page with the selected ride's details
-    navigate('/payment', { state: { ride } });
+    navigate('/payment', { state: { ride, amount: ride.price } }); // Redirect to payment page with ride details
   };
 
   // Function to format time with AM/PM
@@ -81,7 +80,7 @@ const RideSharing = () => {
                 {ride.preferences.luggage && '🧳 Luggage'}
               </p>
             </div>
-            {/* Conditionally Render Book Now Button */}
+            
             {userData?.role === 'rider' && (
               <div className="book-now-section">
                 <button

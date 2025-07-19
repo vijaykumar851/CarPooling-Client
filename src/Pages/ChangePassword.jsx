@@ -23,19 +23,20 @@ function ChangePassword() {
       return;
     }
 
-    try {
-      const user = JSON.parse(localStorage.getItem('user'));
-      if (!user) {
-        alert('Error: User not logged in!');
-        return;
-      }
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user || !user.id) {
+      alert('Error: User not logged in!');
+      return;
+    }
 
-      const response = await fetch(`https://carpooling-server-vlzw.onrender.com/users/${user.id}/change-password`, {
+    try {
+      const response = await fetch('https://carpooling-server-vlzw.onrender.com/users', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          id: user.id,
           currentPassword: formData.currentPassword,
           newPassword: formData.newPassword,
         }),
@@ -43,10 +44,13 @@ function ChangePassword() {
 
       if (response.ok) {
         alert('Password changed successfully!');
-        // Update the user in local storage with the new password
-        user.password = formData.newPassword;
-        localStorage.setItem('user', JSON.stringify(user));
-        navigate('/dashboard'); // Redirect to dashboard
+
+        // Optional: Remove password from localStorage
+        const updatedUser = { ...user };
+        delete updatedUser.password;
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+
+        navigate('/dashboard');
       } else {
         const errorData = await response.json();
         alert(`Error: ${errorData.message}`);
